@@ -24,11 +24,7 @@ public class ActivityPlugin extends SpringBootPlugin {
 
     @Override
     public void start() {
-        // 设置插件的类加载器为线程上下文类加载器
-        // 这样Spring Boot自动配置类在加载依赖类时可以使用插件的类加载器
-        // 注意：不要在这里恢复类加载器，让整个插件生命周期都使用插件的类加载器
-        Thread.currentThread().setContextClassLoader(getWrapper().getPluginClassLoader());
-        System.out.println("ActivityPlugin started with classloader: " + getWrapper().getPluginClassLoader().getClass().getName());
+        System.out.println("ActivityPlugin starting");
         super.start();
     }
 
