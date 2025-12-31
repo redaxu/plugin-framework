@@ -15,19 +15,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
+    show-sql: false
   sbp:
     enabled: true
     plugins-dir: plugins
     controller:
       base-path: sbp
-  flyway:
-    enabled: false
-    check-location: false
 
 server:
   port: 8081
@@ -35,5 +28,5 @@ logging:
   level:
     root: info
     org:
-      laxture: debug
+      laxture: info
 
