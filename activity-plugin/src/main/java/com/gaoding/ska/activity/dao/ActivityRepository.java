@@ -1,6 +1,6 @@
-package com.gaoding.ska.customize.dao;
+package com.gaoding.ska.activity.dao;
 
-import com.gaoding.ska.customize.entity.Activity;
+import com.gaoding.ska.activity.entity.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

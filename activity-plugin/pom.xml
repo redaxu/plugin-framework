@@ -8,12 +8,17 @@
         <groupId>com.gaoding.ska.customize</groupId>
         <artifactId>ska-plugin-framework-demo</artifactId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>activity-plugin</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>com.gaoding.ska.customize</groupId>
+            <artifactId>plugin-sdk</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -25,7 +30,6 @@
         <dependency>
             <groupId>org.laxture</groupId>
             <artifactId>sbp-spring-boot-starter</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -53,13 +57,20 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+            <!-- 插件jar打包配置（默认不执行，通过 plugin profile 激活） -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
                 <executions>
+                    <!-- 禁用默认的 shade execution -->
                     <execution>
-                        <phase>package</phase>
+                        <id>default</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>plugin-jar</id>
+                        <phase>none</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
@@ -69,33 +80,106 @@
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
+                                        <!-- 排除签名文件 -->
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                        <!-- 排除 org.laxture 包下的所有类 -->
+                                        <exclude>org/laxture/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.laxture:sbp-spring-boot-starter</exclude>
-                                </excludes>
-                            </artifactSet>
-                        <transformers>
-                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <manifestEntries>
-                                    <Plugin-Id>activity-plugin</Plugin-Id>
-                                    <Plugin-Version>1.0.0</Plugin-Version>
-                                    <Plugin-Class>com.gaoding.ska.customize.plugin.ActivityPlugin</Plugin-Class>
-                                    <Plugin-Description>活动管理插件</Plugin-Description>
-                                </manifestEntries>
-                            </transformer>
-                        </transformers>
+                            <transformers>
+                                <!-- 合并 META-INF/spring.factories 文件 -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.factories</resource>
+                                </transformer>
+                                <!-- 合并 META-INF/spring-autoconfigure-metadata.properties 文件 -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring-autoconfigure-metadata.properties</resource>
+                                </transformer>
+                                <!-- 合并 META-INF/spring.handlers 文件 -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <!-- 合并 META-INF/spring.schemas 文件 -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <!-- 设置 MANIFEST.MF -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Plugin-Id>activity-plugin</Plugin-Id>
+                                        <Plugin-Version>1.0.0</Plugin-Version>
+                                        <Plugin-Class>com.gaoding.ska.activity.plugin.ActivityPlugin</Plugin-Class>
+                                        <Plugin-Description>活动管理插件</Plugin-Description>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <!-- SpringBoot可执行jar打包配置（默认） -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.gaoding.ska.activity.ActivityPluginApplication</mainClass>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- 默认profile：打包SpringBoot可执行jar -->
+        <profile>
+            <id>spring-boot</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <finalName>app</finalName>
+            </build>
+        </profile>
+        <!-- plugin profile：打包插件jar -->
+        <profile>
+            <id>plugin</id>
+            <build>
+                <finalName>${project.artifactId}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>plugin-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
 

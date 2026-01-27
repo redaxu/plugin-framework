@@ -1,4 +1,4 @@
-package com.gaoding.ska.customize.entity;
+package com.gaoding.ska.activity.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

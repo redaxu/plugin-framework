@@ -1,9 +1,9 @@
-package com.gaoding.ska.customize.service;
+package com.gaoding.ska.activity.service;
 
-import com.gaoding.ska.customize.dao.ActivityRepository;
-import com.gaoding.ska.customize.dto.ActivityCreateRequest;
-import com.gaoding.ska.customize.dto.ActivityDTO;
-import com.gaoding.ska.customize.entity.Activity;
+import com.gaoding.ska.activity.dao.ActivityRepository;
+import com.gaoding.ska.activity.dto.ActivityCreateRequest;
+import com.gaoding.ska.activity.dto.ActivityDTO;
+import com.gaoding.ska.activity.entity.Activity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,10 @@
-package com.gaoding.ska.customize.controller;
+package com.gaoding.ska.activity.controller;
 
-import com.gaoding.ska.customize.dto.ActivityCreateRequest;
-import com.gaoding.ska.customize.dto.ActivityDTO;
-import com.gaoding.ska.customize.service.ActivityService;
+import com.gaoding.ska.activity.dto.ActivityCreateRequest;
+import com.gaoding.ska.activity.dto.ActivityDTO;
+import com.gaoding.ska.activity.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,8 +26,11 @@ import java.util.List;
  * @since 2024/12/19
  */
 @RestController
-@RequestMapping("/api/activities")
+@RequestMapping("/activities")
 public class ActivityController {
+
+    @Value("${activity.plugin.expire-time}")
+    private String expireTime;
 
     @Autowired
     private ActivityService activityService;
@@ -39,6 +43,7 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ActivityDTO> getActivity(@PathVariable Long id) {
+        System.out.println("getActivity"+expireTime);
         ActivityDTO activity = activityService.getActivityById(id);
         return ResponseEntity.ok(activity);
     }

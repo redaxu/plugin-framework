@@ -1,11 +1,20 @@
+app:
+  env: fat  # 添加环境配置，解决 GrpcEnvironmentPostProcessor 报错
+
+activity:
+  plugin:
+    expire-time: 2025-12-31 23:59:59  # 插件过期时间，格式：yyyy-MM-dd HH:mm:ss
 spring:
   application:
     name: activity-plugin
   datasource:
     url: jdbc:mysql://localhost:3306/activity_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://rm-2vcewx536ih43ydu5so.mysql.cn-chengdu.rds.aliyuncs.com/activity_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+#    username: super
+#    password: sdcVUV@ic121
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
@@ -21,4 +30,15 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         use-new-id-generator-mappings: true
-
+  flyway:
+    enabled: false
+#  redis:
+#    host: r-2vc6wc88w78d60dej7.redis.cn-chengdu.rds.aliyuncs.com
+#    password: 6379
+#    timeout: 500ms
+#    jedis:
+#      pool:
+#        max-active: 10
+#        max-wait: -1ms
+#        max-idle: 100
+#        min-idle: 50

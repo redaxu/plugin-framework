@@ -1,16 +1,14 @@
-package com.gaoding.ska.customize.dto;
+package com.gaoding.ska.activity.dto;
 
 import java.util.Date;
 
 /**
- * 活动DTO
+ * 创建活动请求DTO
  *
  * @author baiye
  * @since 2024/12/19
  */
-public class ActivityDTO {
-
-    private Long id;
+public class ActivityCreateRequest {
 
     private String name;
 
@@ -21,18 +19,6 @@ public class ActivityDTO {
     private Date endTime;
 
     private Integer status;
-
-    private Date createTime;
-
-    private Date updateTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -72,22 +58,6 @@ public class ActivityDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
 }
